@@ -1,9 +1,13 @@
 package com.intugratic.entities;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -25,13 +29,6 @@ public class Lead {
     private String priority;
     private String followUpDate;
 
-    private String address;
-    private String street;
-    private String city;
-    private String state;
-    private String zipCode;
-    private String country;
-
-    private String siteVisit;
-    private String siteVisitDate;
+    @OneToMany(mappedBy = "lead", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Address> addresses;
 }

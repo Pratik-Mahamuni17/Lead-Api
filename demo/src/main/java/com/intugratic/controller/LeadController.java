@@ -2,50 +2,48 @@ package com.intugratic.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.intugratic.dto.LeadRequest;
-import com.intugratic.entities.Lead;
+import com.intugratic.dto.LeadResponse;
 import com.intugratic.service.LeadService;
 
+import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/leads")
+@RequestMapping("/leads")
 public class LeadController {
 
-    @Autowired
-    private LeadService leadService;
+	private final LeadService leadService;
 
-    @PostMapping
-    public ResponseEntity<Lead> createLead(@RequestBody LeadRequest req) {
-        Lead savedLead = leadService.saveLead(req);
-        return ResponseEntity.ok(savedLead);
-    }
-    
-    @GetMapping
-    public ResponseEntity<List<Lead>> getAllLeads() {
-        List<Lead> leads = leadService.getAllLeads();
-        return ResponseEntity.ok(leads);
-    }
-    
-    @GetMapping("/paged")
-    public ResponseEntity<Page<Lead>> getPaginatedLeads(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+	public LeadController(LeadService leadService) {
+	    this.leadService = leadService;
+	}
 
-        Page<Lead> leads = leadService.getPaginatedLeads(page, size);
-        return ResponseEntity.ok(leads);
-    }
-    
-    @GetMapping("/{id}")
-    public ResponseEntity<Lead> getLeadById(@PathVariable Long id) {
-        Lead lead = leadService.getLeadById(id);
-        return ResponseEntity.ok(lead);
-    }
+	@PostMapping("/create")
+	public ResponseEntity<LeadResponse> createLead(@Valid @RequestBody LeadRequest req) {
+		// call save method
+		LeadResponse saved = leadService.saveLead(req);
+		return ResponseEntity.ok(saved);
+	}
 
+	@GetMapping("getall")
+	public ResponseEntity<List<LeadResponse>> getAllLeads() {
+		List<LeadResponse> leads = leadService.getAllLeads();
+		return ResponseEntity.ok(leads);
+	}
+
+	@GetMapping("/paged")
+	public ResponseEntity<Page<LeadResponse>> getPaginated(
+			@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size, 
+			@RequestParam(required = false) String keyword) 
+	{
+		Page<LeadResponse> leads = leadService.getPaginatedLeads(page, size, keyword);
+		return ResponseEntity.ok(leads);
+	}
 
 }
-
