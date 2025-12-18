@@ -3,13 +3,14 @@ package com.intugratic.controller;
 import java.util.List;
 
 
+import com.intugratic.dto.LeadFullResponse;
+import com.intugratic.service.LeadService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.intugratic.dto.LeadRequest;
 import com.intugratic.dto.LeadResponse;
-import com.intugratic.service.LeadService;
 
 import jakarta.validation.Valid;
 
@@ -31,10 +32,12 @@ public class LeadController {
 	}
 
 	@GetMapping("getall")
-	public ResponseEntity<List<LeadResponse>> getAllLeads() {
-		List<LeadResponse> leads = leadService.getAllLeads();
-		return ResponseEntity.ok(leads);
+	public ResponseEntity<List<LeadFullResponse>> getAllLeads() {
+		return ResponseEntity.ok(leadService.getAllLeads());
 	}
+
+
+
 
 	@GetMapping("/paged")
 	public ResponseEntity<Page<LeadResponse>> getPaginated(

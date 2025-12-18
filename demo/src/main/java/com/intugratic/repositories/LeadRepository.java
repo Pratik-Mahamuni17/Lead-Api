@@ -2,6 +2,7 @@ package com.intugratic.repositories;
 
 import java.util.List;
 
+import com.intugratic.projection.LeadWithAddressProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +14,10 @@ import com.intugratic.entities.Lead;
 public interface LeadRepository extends JpaRepository<Lead, Long>{
 	@Query("SELECT DISTINCT l FROM Lead l LEFT JOIN FETCH l.addresses")
     List<Lead> findAllWithAddresses();
+
+
+    List<LeadWithAddressProjection> findAllBy();
+
 
     @Query(value = "SELECT DISTINCT l FROM Lead l LEFT JOIN FETCH l.addresses",
            countQuery = "SELECT COUNT(l) FROM Lead l")
